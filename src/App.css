@@ -116,6 +116,7 @@ body {
 }
 
 .toDos--toggle::before {
+  cursor: pointer;
   z-index: 1;
   visibility: visible;
   content: " ";

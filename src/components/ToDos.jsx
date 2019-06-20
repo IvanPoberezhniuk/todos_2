@@ -1,26 +1,30 @@
 import React, { Component } from "react";
 
 let toDoData = [
-  { task: "Learn 1", isComplete: false },
-  { task: "Learn 2", isComplete: true },
-  { task: "Learn 3", isComplete: true },
-  { task: "Learn 4", isComplete: false }
+  { task: "Learn JS", isComplete: false },
+  { task: "Learn HTML", isComplete: true },
+  { task: "Learn React", isComplete: true }
 ];
+
+// let toDoData = window.localStorage.getItem("data")
+//   ? window.localStorage.getItem("data")
+//   : [{ task: "Learn React", isComplete: true }];
 
 export default class ToDos extends Component {
   state = {
-    data: toDoData
+    data: toDoData,
+    inputValue: ""
   };
 
   addTask = event => {
-    if (event.key === "Enter") {
-      let newTaskName = event.target.value;
-      toDoData = [...toDoData, { task: newTaskName, isComplete: false }];
+    event.preventDefault();
 
-      this.setState({
-        data: toDoData
-      });
-    }
+    this.setState(prevState => ({
+      data: [
+        ...prevState.data,
+        { task: this.state.inputValue, isComplete: false }
+      ]
+    }));
   };
 
   removeTask = event => {
@@ -69,29 +73,23 @@ export default class ToDos extends Component {
     });
   };
 
-  editTask = event => {
-    let dataValue = event.target.getAttribute("data-task");
-    let value = event.target.value;
-    let newData = toDoData.map(task =>
-      task.task === dataValue ? (task.task = value) : task
-    );
-
+  changeStateInputValue = event => {
     this.setState({
-      data: newData
+      inputValue: event.target.value
     });
   };
 
   render() {
     return (
-      <div action="" className="toDos" autoComplete="off">
+      <form className="toDos">
         <input
           type="text"
-          name="toDos"
           placeholder="What need to be done?"
           className="input-base"
-          onKeyPress={this.addTask}
-          autocomplete="off"
+          autoComplete="off"
+          onInput={event => this.changeStateInputValue(event)}
         />
+        <button type="submit" onClick={event => this.addTask(event)} hidden />
         {this.state.data.map((task, index) => {
           return (
             <div className="toDos--dropDownTask" key={task.task + index}>
@@ -103,18 +101,12 @@ export default class ToDos extends Component {
                   className="toDos--toggle"
                   defaultChecked={task.isComplete}
                 />
-                {/* <input
-                  onChange={event => this.editTask(event)}
-                  type="text"
-                  data-task={task.task}
-                  className="toDos--task"
-                  defaultValue={task.task}
-                /> */}
                 <span data-task={task.task} className="toDos--task">
                   {task.task}
                 </span>
               </div>
               <button
+                type="button"
                 className="toDos--button-delete"
                 onClick={event => this.removeTask(event)}
                 data-task={task.task}
@@ -125,7 +117,10 @@ export default class ToDos extends Component {
           );
         })}
         <div className="toDos--footer">
-          <div>{this.state.data.length} items left</div>
+          <div>
+            {this.state.data.filter(task => task.isComplete === true).length}{" "}
+            items left
+          </div>
           <div className="toDos--filter">
             <div onClick={() => this.filterTasks()}>All</div>
             <div onClick={() => this.filterTasks(true)}>Active</div>
@@ -138,7 +133,11 @@ export default class ToDos extends Component {
             Clear Completed
           </div>
         </div>
-      </div>
+      </form>
     );
   }
 }
+
+// window.onbeforeunload = () => {
+//   window.localStorage.setItem("data", toDoData);
+// };
