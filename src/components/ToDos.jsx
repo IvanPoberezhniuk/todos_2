@@ -1,75 +1,91 @@
 import React, { Component } from "react";
+import ToDosFooter from "./toDos--footer.jsx";
+import ToDosList from "./toDos--list.jsx";
+let randomstring = require("randomstring");
 
-let toDoData = [
-  { task: "Learn JS", isComplete: false },
-  { task: "Learn HTML", isComplete: true },
-  { task: "Learn React", isComplete: true }
-];
-
-// let toDoData = window.localStorage.getItem("data")
-//   ? window.localStorage.getItem("data")
-//   : [{ task: "Learn React", isComplete: true }];
+let localData = [];
 
 export default class ToDos extends Component {
   state = {
-    data: toDoData,
+    data: [],
     inputValue: ""
   };
+
+  async componentDidMount() {
+    setTimeout(() => {
+      localData = JSON.parse(window.localStorage.getItem("localData")) || [];
+
+      this.setState(prevState => ({
+        data: [...prevState.data, ...localData]
+      }));
+    }, 1111);
+  }
 
   addTask = event => {
     event.preventDefault();
 
-    this.setState(prevState => ({
-      data: [
-        ...prevState.data,
-        { task: this.state.inputValue, isComplete: false }
-      ]
-    }));
+    if (/^ *$/.test(this.state.inputValue)) {
+      return;
+    } else {
+      localData = [
+        ...localData,
+        {
+          task: this.state.inputValue,
+          isCompleted: false,
+          id: randomstring.generate(5)
+        }
+      ];
+
+      this.setState({
+        data: localData,
+        inputValue: ""
+      });
+    }
   };
 
-  removeTask = event => {
-    event.preventDefault();
-
-    let dataTask = event.target.getAttribute("data-task");
-    let index = toDoData.findIndex(task => task.task === dataTask);
-
-    toDoData.splice(index, 1);
+  removeTask = id => {
+    let index = localData.findIndex(task => task.id === id);
+    localData.splice(index, 1);
 
     this.setState({
-      data: toDoData
+      data: localData
     });
   };
 
-  com;
-
-  filterTasks = (isComplete = null) => {
-    let newData;
-
-    isComplete === null
-      ? (newData = toDoData)
-      : (newData = toDoData.filter(task => task.isComplete !== isComplete));
+  filterTasks = filterBy => {
+    let chosenFilter = data => {
+      switch (filterBy) {
+        default:
+          return data;
+        case "active":
+          return data.filter(task => !task.isCompleted);
+        case "completed":
+          return data.filter(task => task.isCompleted);
+      }
+    };
 
     this.setState({
-      data: newData
+      data: chosenFilter(localData)
     });
   };
 
-  toggleIsComplete = event => {
-    let dataValue = event.target.getAttribute("data-task");
-    let index = toDoData.findIndex(task => task.task === dataValue);
+  toggleIsCompleted = id => {
+    this.setState(prevState => {
+      let taskIndex = localData.findIndex(task => task.id === id);
 
-    toDoData[index].isComplete = !toDoData[index].isComplete;
+      localData[taskIndex].isCompleted = !localData[taskIndex].isCompleted;
 
-    this.setState({
-      data: toDoData
+      return {
+        data: localData
+      };
     });
   };
 
   clearCompleted = () => {
-    toDoData = toDoData.filter(task => task.isComplete !== true);
+    localData = localData.filter(task => task.isCompleted !== true);
 
     this.setState({
-      data: toDoData
+      data: localData
     });
   };
 
@@ -80,6 +96,10 @@ export default class ToDos extends Component {
   };
 
   render() {
+    window.addEventListener("beforeunload", () =>
+      window.localStorage.setItem("localData", JSON.stringify(localData))
+    );
+
     return (
       <form className="toDos">
         <input
@@ -87,57 +107,30 @@ export default class ToDos extends Component {
           placeholder="What need to be done?"
           className="input-base"
           autoComplete="off"
-          onInput={event => this.changeStateInputValue(event)}
+          value={this.state.inputValue}
+          onChange={event => this.changeStateInputValue(event)}
         />
         <button type="submit" onClick={event => this.addTask(event)} hidden />
-        {this.state.data.map((task, index) => {
-          return (
-            <div className="toDos--dropDownTask" key={task.task + index}>
-              <div>
-                <input
-                  onClick={event => this.toggleIsComplete(event)}
-                  type="checkbox"
-                  data-task={task.task}
-                  className="toDos--toggle"
-                  defaultChecked={task.isComplete}
-                />
-                <span data-task={task.task} className="toDos--task">
-                  {task.task}
-                </span>
-              </div>
-              <button
-                type="button"
-                className="toDos--button-delete"
-                onClick={event => this.removeTask(event)}
-                data-task={task.task}
-              >
-                x
-              </button>
-            </div>
-          );
-        })}
-        <div className="toDos--footer">
-          <div>
-            {this.state.data.filter(task => task.isComplete === true).length}{" "}
-            items left
-          </div>
-          <div className="toDos--filter">
-            <div onClick={() => this.filterTasks()}>All</div>
-            <div onClick={() => this.filterTasks(true)}>Active</div>
-            <div onClick={() => this.filterTasks(false)}>Completed</div>
-          </div>
-          <div
-            onClick={() => this.clearCompleted()}
-            className="toDos--clearCompleted"
-          >
-            Clear Completed
-          </div>
-        </div>
+
+        {!this.state.data.length ? (
+          false
+        ) : (
+          <>
+            <ToDosList
+              data={this.state.data}
+              toggleIsCompleted={this.toggleIsCompleted}
+              removeTask={this.removeTask}
+            />
+            <ToDosFooter
+              filterTasks={this.filterTasks}
+              clearCompleted={this.clearCompleted}
+              completedTasks={
+                this.state.data.filter(task => task.isCompleted === true).length
+              }
+            />
+          </>
+        )}
       </form>
     );
   }
 }
-
-// window.onbeforeunload = () => {
-//   window.localStorage.setItem("data", toDoData);
-// };
