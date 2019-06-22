@@ -16,7 +16,7 @@ body {
   outline: none;
 }
 
-.toDos-header {
+.toDos__header {
   font-size: 100px;
   font-weight: normal;
   color: rgba(175, 47, 47, 0.15);
@@ -44,7 +44,7 @@ body {
   font-style: italic;
 }
 
-.toDos--dropDownTask {
+.toDos__dropDownTask {
   max-width: 600px;
   min-height: 58px;
   display: flex;
@@ -56,17 +56,17 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-.toDos--dropDownTask:hover {
+.toDos__dropDownTask:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.03);
 }
 
-.toDos--dropDownTask > div {
+.toDos__dropDownTask > div {
   display: flex;
   align-items: center;
 }
 
-.toDos--button-delete {
+.toDos__button-delete {
   opacity: 0;
   width: 58px;
   height: 58px;
@@ -77,13 +77,13 @@ body {
   font-weight: bold;
 }
 
-.toDos--button-delete:hover {
+.toDos__button-delete:hover {
   cursor: pointer;
   opacity: 1;
   border: 3px solid rgba(0, 0, 0, 0.03);
 }
 
-.toDos--footer {
+.toDos__footer {
   display: flex;
   color: rgba(0, 0, 0, 0.336);
   justify-content: space-between;
@@ -91,31 +91,31 @@ body {
   padding: 10px 5px;
 }
 
-.toDos--filter {
+.toDos__filter {
   width: 170px;
   display: flex;
   justify-content: space-between;
 }
 
-.toDos--filter > div {
+.toDos__filter > div {
   padding: 2px;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.toDos--filter > div:hover {
+.toDos__filter > div:hover {
   box-sizing: border-box;
   border: 1px solid rgba(175, 47, 47, 0.288);
 }
 
-.toDos--toggle {
+.toDos__toggle {
   visibility: hidden;
   position: relative;
   height: 40px;
   width: 40px;
 }
 
-.toDos--toggle::before {
+.toDos__toggle::before {
   cursor: pointer;
   z-index: 1;
   visibility: visible;
@@ -128,23 +128,23 @@ body {
   background-color: white;
 }
 
-.toDos--task {
+.toDos__task {
   padding: 10px;
   font-size: 24px;
   border: none;
   margin-left: 10px;
 }
 
-.toDos--task:focus {
+.toDos__task:focus {
   outline: none;
 }
 
-.toDos--clearCompleted:hover {
+.toDos__clearCompleted:hover {
   cursor: pointer;
   text-decoration: underline;
 }
 
-.toDos--toggle::after {
+.toDos__toggle::after {
   visibility: hidden;
   content: " ";
   height: 10px;
@@ -158,11 +158,11 @@ body {
   border-bottom: 1px green solid;
 }
 
-.toDos--toggle:checked::after {
+.toDos__toggle:checked::after {
   visibility: visible;
 }
 
-.toDos--toggle:checked ~ span {
+.toDos__toggle:checked ~ span {
   text-decoration-line: line-through;
   opacity: 0.5;
 }

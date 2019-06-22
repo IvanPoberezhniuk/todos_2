@@ -8,7 +8,6 @@ class App extends Component {
   render() {
     return (
       <>
-        <h1 className="toDos-header">todos</h1>
         <ToDos />
       </>
     );

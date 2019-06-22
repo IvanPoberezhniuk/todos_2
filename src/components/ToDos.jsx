@@ -12,13 +12,11 @@ export default class ToDos extends Component {
   };
 
   async componentDidMount() {
-    setTimeout(() => {
-      localData = JSON.parse(window.localStorage.getItem("localData")) || [];
+    localData = JSON.parse(window.localStorage.getItem("localData")) || [];
 
-      this.setState(prevState => ({
-        data: [...prevState.data, ...localData]
-      }));
-    }, 1111);
+    this.setState(prevState => ({
+      data: [...prevState.data, ...localData]
+    }));
   }
 
   addTask = event => {
@@ -101,36 +99,37 @@ export default class ToDos extends Component {
     );
 
     return (
-      <form className="toDos">
-        <input
-          type="text"
-          placeholder="What need to be done?"
-          className="input-base"
-          autoComplete="off"
-          value={this.state.inputValue}
-          onChange={event => this.changeStateInputValue(event)}
-        />
-        <button type="submit" onClick={event => this.addTask(event)} hidden />
+      <>
+        <h1 className="toDos__header">todos</h1>
+        <form className="toDos">
+          <input
+            type="text"
+            placeholder="What need to be done?"
+            className="input-base"
+            autoComplete="off"
+            value={this.state.inputValue}
+            onChange={event => this.changeStateInputValue(event)}
+          />
+          <button type="submit" onClick={event => this.addTask(event)} hidden />
 
-        {!this.state.data.length ? (
-          false
-        ) : (
-          <>
+          {!this.state.data.length ? (
+            false
+          ) : (
             <ToDosList
               data={this.state.data}
               toggleIsCompleted={this.toggleIsCompleted}
               removeTask={this.removeTask}
             />
-            <ToDosFooter
-              filterTasks={this.filterTasks}
-              clearCompleted={this.clearCompleted}
-              completedTasks={
-                this.state.data.filter(task => task.isCompleted === true).length
-              }
-            />
-          </>
-        )}
-      </form>
+          )}
+          <ToDosFooter
+            filterTasks={this.filterTasks}
+            clearCompleted={this.clearCompleted}
+            completedTasks={
+              this.state.data.filter(task => task.isCompleted === true).length
+            }
+          />
+        </form>
+      </>
     );
   }
 }

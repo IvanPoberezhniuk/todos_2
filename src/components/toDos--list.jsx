@@ -3,19 +3,19 @@ import React from "react";
 let ToDosList = props => {
   return props.data.map(task => {
     return (
-      <div className="toDos--dropDownTask" key={task.id}>
+      <div className="toDos__dropDownTask" key={task.id}>
         <div>
           <input
             onClick={() => props.toggleIsCompleted(task.id)}
             type="checkbox"
-            className="toDos--toggle"
+            className="toDos__toggle"
             defaultChecked={task.isCompleted}
           />
-          <span className="toDos--task">{task.task}</span>
+          <span className="toDos__task">{task.task}</span>
         </div>
         <button
           type="button"
-          className="toDos--button-delete"
+          className="toDos__button-delete"
           onClick={() => props.removeTask(task.id)}
         >
           x
