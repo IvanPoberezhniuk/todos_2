@@ -3,50 +3,55 @@ import ToDosFooter from "./toDos--footer.jsx";
 import ToDosList from "./toDos--list.jsx";
 let randomstring = require("randomstring");
 
-let localData = [];
-
 export default class ToDos extends Component {
   state = {
     data: [],
+    actualData: [],
     inputValue: ""
   };
 
   async componentDidMount() {
-    localData = JSON.parse(window.localStorage.getItem("localData")) || [];
+    let localData = JSON.parse(window.localStorage.getItem("localData")) || [];
 
     this.setState(prevState => ({
-      data: [...prevState.data, ...localData]
+      data: [...prevState.data, ...localData],
+      actualData: [...prevState.data, ...localData]
     }));
   }
 
   addTask = event => {
+    git;
     event.preventDefault();
 
     if (/^ *$/.test(this.state.inputValue)) {
       return;
     } else {
-      localData = [
-        ...localData,
-        {
-          task: this.state.inputValue,
-          isCompleted: false,
-          id: randomstring.generate(5)
-        }
-      ];
+      this.setState(prevState => {
+        let updateData = [
+          ...prevState.actualData,
+          {
+            task: prevState.inputValue,
+            isCompleted: false,
+            id: randomstring.generate(5)
+          }
+        ];
 
-      this.setState({
-        data: localData,
-        inputValue: ""
+        return {
+          data: updateData,
+          actualData: updateData,
+          inputValue: ""
+        };
       });
     }
   };
 
   removeTask = id => {
-    let index = localData.findIndex(task => task.id === id);
-    localData.splice(index, 1);
-
-    this.setState({
-      data: localData
+    this.setState(prevState => {
+      let index = prevState.actualData.findIndex(task => task.id === id);
+      prevState.actualData.splice(index, 1);
+      return {
+        data: [...prevState.actualData]
+      };
     });
   };
 
@@ -62,28 +67,34 @@ export default class ToDos extends Component {
       }
     };
 
-    this.setState({
-      data: chosenFilter(localData)
-    });
+    this.setState(prevState => ({
+      data: chosenFilter(prevState.actualData)
+    }));
   };
 
   toggleIsCompleted = id => {
     this.setState(prevState => {
-      let taskIndex = localData.findIndex(task => task.id === id);
+      console.log(prevState.actualData);
+      let taskIndex = prevState.actualData.findIndex(task => task.id === id);
 
-      localData[taskIndex].isCompleted = !localData[taskIndex].isCompleted;
+      prevState.actualData[taskIndex].isCompleted = !prevState.actualData[
+        taskIndex
+      ].isCompleted;
 
       return {
-        data: localData
+        data: prevState.actualData
       };
     });
   };
 
   clearCompleted = () => {
-    localData = localData.filter(task => task.isCompleted !== true);
-
-    this.setState({
-      data: localData
+    this.setState(prevState => {
+      prevState.actualData = prevState.actualData.filter(
+        task => task.isCompleted !== true
+      );
+      return {
+        data: prevState.actualData
+      };
     });
   };
 
@@ -95,7 +106,10 @@ export default class ToDos extends Component {
 
   render() {
     window.addEventListener("beforeunload", () =>
-      window.localStorage.setItem("localData", JSON.stringify(localData))
+      window.localStorage.setItem(
+        "localData",
+        JSON.stringify(this.state.actualData)
+      )
     );
 
     return (
