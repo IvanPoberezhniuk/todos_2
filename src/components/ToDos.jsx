@@ -20,7 +20,6 @@ export default class ToDos extends Component {
   }
 
   addTask = event => {
-    git;
     event.preventDefault();
 
     if (/^ *$/.test(this.state.inputValue)) {
@@ -74,7 +73,6 @@ export default class ToDos extends Component {
 
   toggleIsCompleted = id => {
     this.setState(prevState => {
-      console.log(prevState.actualData);
       let taskIndex = prevState.actualData.findIndex(task => task.id === id);
 
       prevState.actualData[taskIndex].isCompleted = !prevState.actualData[
@@ -113,7 +111,7 @@ export default class ToDos extends Component {
     );
 
     return (
-      <>
+      <div className="toDos__container">
         <h1 className="toDos__header">todos</h1>
         <form className="toDos">
           <input
@@ -143,7 +141,7 @@ export default class ToDos extends Component {
             }
           />
         </form>
-      </>
+      </div>
     );
   }
 }

@@ -23,7 +23,7 @@ body {
   margin: 0;
 }
 
-#root {
+.toDos__container {
   width: 100%;
   display: flex;
   align-items: center;
