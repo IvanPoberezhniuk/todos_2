@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import ToDosFooter from "./toDos--footer.jsx";
-import ToDosList from "./toDos--list.jsx";
-let randomstring = require("randomstring");
+import React, { Component } from 'react';
+import ToDosFooter from './toDos__footer.jsx';
+import ToDosList from './toDos__list.jsx';
+let randomstring = require('randomstring');
 
 export default class ToDos extends Component {
   state = {
     data: [],
     actualData: [],
-    inputValue: ""
+    inputValue: ''
   };
 
   async componentDidMount() {
-    let localData = JSON.parse(window.localStorage.getItem("localData")) || [];
+    let localData = JSON.parse(window.localStorage.getItem('localData')) || [];
 
     this.setState(prevState => ({
       data: [...prevState.data, ...localData],
@@ -38,7 +38,7 @@ export default class ToDos extends Component {
         return {
           data: updateData,
           actualData: updateData,
-          inputValue: ""
+          inputValue: ''
         };
       });
     }
@@ -59,9 +59,9 @@ export default class ToDos extends Component {
       switch (filterBy) {
         default:
           return data;
-        case "active":
+        case 'active':
           return data.filter(task => !task.isCompleted);
-        case "completed":
+        case 'completed':
           return data.filter(task => task.isCompleted);
       }
     };
@@ -103,11 +103,10 @@ export default class ToDos extends Component {
   };
 
   render() {
-    window.addEventListener("beforeunload", () =>
-      window.localStorage.setItem(
-        "localData",
-        JSON.stringify(this.state.actualData)
-      )
+    const { data, actualData } = this.state;
+
+    window.addEventListener('beforeunload', () =>
+      window.localStorage.setItem('localData', JSON.stringify(actualData))
     );
 
     return (
@@ -119,16 +118,15 @@ export default class ToDos extends Component {
             placeholder="What need to be done?"
             className="input-base"
             autoComplete="off"
-            value={this.state.inputValue}
-            onChange={event => this.changeStateInputValue(event)}
+            onChange={this.changeStateInputValue}
           />
-          <button type="submit" onClick={event => this.addTask(event)} hidden />
+          <button type="submit" onClick={this.addTask} hidden />
 
-          {!this.state.data.length ? (
+          {!data.length ? (
             false
           ) : (
             <ToDosList
-              data={this.state.data}
+              data={data}
               toggleIsCompleted={this.toggleIsCompleted}
               removeTask={this.removeTask}
             />
@@ -137,7 +135,7 @@ export default class ToDos extends Component {
             filterTasks={this.filterTasks}
             clearCompleted={this.clearCompleted}
             completedTasks={
-              this.state.data.filter(task => task.isCompleted === true).length
+              data.filter(task => task.isCompleted !== true).length
             }
           />
         </form>
