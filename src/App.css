@@ -108,17 +108,31 @@ body {
   color: rgba(175, 47, 47, 0.452);
 }
 
-.toDos__toggle {
-  visibility: hidden;
+.toDos__task-wrapper {
   position: relative;
-  height: 40px;
-  width: 40px;
 }
 
-.toDos__toggle::before {
+.toDos__toggle {
+  position: relative;
+  z-index: 3;
+  height: 40px;
+  width: 40px;
+  opacity: 0;
+}
+
+.toDos__toggle:hover {
+  cursor: pointer;
+}
+
+.toDos__toggle:checked + .toDos__toggle--helper::after {
+  visibility: visible;
+}
+
+.toDos__toggle--helper::before {
+  top: 12%;
+  left: 0;
   cursor: pointer;
   z-index: 1;
-  visibility: visible;
   content: ' ';
   height: 40px;
   width: 40px;
@@ -128,11 +142,29 @@ body {
   background-color: white;
 }
 
+.toDos__toggle--helper::after {
+  top: 20px;
+  left: 11px;
+  visibility: hidden;
+  content: '';
+  height: 10px;
+  width: 20px;
+  position: absolute;
+  z-index: 2;
+  transform: rotate(-45deg);
+  border-left: 1px green solid;
+  border-bottom: 1px green solid;
+}
+
 .toDos__task {
   padding: 10px;
   font-size: 24px;
   border: none;
   margin-left: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 480px;
 }
 
 .toDos__task:focus {
@@ -144,25 +176,11 @@ body {
   text-decoration: underline;
 }
 
-.toDos__toggle::after {
-  visibility: hidden;
-  content: ' ';
-  height: 10px;
-  width: 20px;
-  position: absolute;
-  z-index: 2;
-  transform: rotate(-45deg);
-  left: 11px;
-  top: 12px;
-  border-left: 1px green solid;
-  border-bottom: 1px green solid;
-}
-
 .toDos__toggle:checked::after {
   visibility: visible;
 }
 
-.toDos__toggle:checked ~ span {
+.toDos__toggle:checked ~ .toDos__task {
   text-decoration-line: line-through;
   opacity: 0.5;
 }
