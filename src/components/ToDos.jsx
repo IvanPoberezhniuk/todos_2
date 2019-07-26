@@ -10,14 +10,29 @@ export default class ToDos extends Component {
     inputValue: ''
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     let localData = JSON.parse(window.localStorage.getItem('localData')) || [];
 
     this.setState(prevState => ({
       data: [...prevState.data, ...localData],
       actualData: [...prevState.data, ...localData]
     }));
+
+    this.saveDataToLocalStorage();
   }
+
+  componentWillUnmount() {
+    this.saveDataToLocalStorage();
+  }
+
+  saveDataToLocalStorage = () => {
+    window.addEventListener('beforeunload', () =>
+      window.localStorage.setItem(
+        'localData',
+        JSON.stringify(this.state.actualData)
+      )
+    );
+  };
 
   addTask = event => {
     event.preventDefault();
@@ -26,7 +41,7 @@ export default class ToDos extends Component {
       return;
     } else {
       this.setState(prevState => {
-        let updateData = [
+        const newData = [
           ...prevState.actualData,
           {
             task: prevState.inputValue,
@@ -36,8 +51,8 @@ export default class ToDos extends Component {
         ];
 
         return {
-          data: updateData,
-          actualData: updateData,
+          data: newData,
+          actualData: newData,
           inputValue: ''
         };
       });
@@ -46,16 +61,17 @@ export default class ToDos extends Component {
 
   removeTask = id => {
     this.setState(prevState => {
-      let index = prevState.actualData.findIndex(task => task.id === id);
-      prevState.actualData.splice(index, 1);
+      const newData = [...prevState.actualData.filter(task => task.id !== id)];
+
       return {
-        data: [...prevState.actualData]
+        data: newData,
+        actualData: newData
       };
     });
   };
 
   filterTasks = filterBy => {
-    let chosenFilter = data => {
+    const chosenFilter = data => {
       switch (filterBy) {
         default:
           return data;
@@ -73,25 +89,25 @@ export default class ToDos extends Component {
 
   toggleIsCompleted = id => {
     this.setState(prevState => {
-      let taskIndex = prevState.actualData.findIndex(task => task.id === id);
+      const taskIndex = prevState.actualData.findIndex(task => task.id === id);
+      const newData = [...prevState.actualData];
 
-      prevState.actualData[taskIndex].isCompleted = !prevState.actualData[
-        taskIndex
-      ].isCompleted;
+      newData[taskIndex].isCompleted = !newData[taskIndex].isCompleted;
 
       return {
-        data: prevState.actualData
+        data: newData,
+        actualData: newData
       };
     });
   };
 
   clearCompleted = () => {
     this.setState(prevState => {
-      prevState.actualData = prevState.actualData.filter(
-        task => task.isCompleted !== true
-      );
+      const newData = prevState.actualData.filter(task => !task.isCompleted);
+
       return {
-        data: prevState.actualData
+        data: newData,
+        actualData: newData
       };
     });
   };
@@ -103,11 +119,7 @@ export default class ToDos extends Component {
   };
 
   render() {
-    const { data, actualData } = this.state;
-
-    window.addEventListener('beforeunload', () =>
-      window.localStorage.setItem('localData', JSON.stringify(actualData))
-    );
+    const { data } = this.state;
 
     return (
       <div className="toDos__container">
