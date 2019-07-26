@@ -131,6 +131,7 @@ export default class ToDos extends Component {
             className="input-base"
             autoComplete="off"
             onChange={this.changeStateInputValue}
+            value={this.state.inputValue}
           />
           <button type="submit" onClick={this.addTask} hidden />
 
