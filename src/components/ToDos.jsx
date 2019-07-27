@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import ToDosFooter from './toDos__footer.jsx';
 import ToDosList from './toDos__list.jsx';
-let randomstring = require('randomstring');
+const randomstring = require('randomstring');
 
 export default class ToDos extends Component {
   state = {
-    data: [],
+    visibleData: [],
     actualData: [],
     inputValue: ''
   };
 
   componentDidMount() {
-    let localData = JSON.parse(window.localStorage.getItem('localData')) || [];
+    const localData =
+      JSON.parse(window.localStorage.getItem('localData')) || [];
 
-    this.setState(prevState => ({
-      data: [...prevState.data, ...localData],
-      actualData: [...prevState.data, ...localData]
-    }));
+    this.setState({
+      visibleData: [...localData],
+      actualData: [...localData]
+    });
 
     this.saveDataToLocalStorage();
   }
@@ -36,8 +37,9 @@ export default class ToDos extends Component {
 
   addTask = event => {
     event.preventDefault();
+    const isEmpty = value => /^ *$/.test(value);
 
-    if (/^ *$/.test(this.state.inputValue)) {
+    if (isEmpty(this.state.inputValue)) {
       return;
     } else {
       this.setState(prevState => {
@@ -51,7 +53,7 @@ export default class ToDos extends Component {
         ];
 
         return {
-          data: newData,
+          visibleData: newData,
           actualData: newData,
           inputValue: ''
         };
@@ -64,7 +66,7 @@ export default class ToDos extends Component {
       const newData = [...prevState.actualData.filter(task => task.id !== id)];
 
       return {
-        data: newData,
+        visibleData: newData,
         actualData: newData
       };
     });
@@ -83,7 +85,7 @@ export default class ToDos extends Component {
     };
 
     this.setState(prevState => ({
-      data: chosenFilter(prevState.actualData)
+      visibleData: chosenFilter(prevState.actualData)
     }));
   };
 
@@ -95,7 +97,7 @@ export default class ToDos extends Component {
       newData[taskIndex].isCompleted = !newData[taskIndex].isCompleted;
 
       return {
-        data: newData,
+        visibleData: newData,
         actualData: newData
       };
     });
@@ -106,7 +108,7 @@ export default class ToDos extends Component {
       const newData = prevState.actualData.filter(task => !task.isCompleted);
 
       return {
-        data: newData,
+        visibleData: newData,
         actualData: newData
       };
     });
@@ -119,7 +121,7 @@ export default class ToDos extends Component {
   };
 
   render() {
-    const { data } = this.state;
+    const { visibleData } = this.state;
 
     return (
       <div className="toDos__container">
@@ -135,11 +137,11 @@ export default class ToDos extends Component {
           />
           <button type="submit" onClick={this.addTask} hidden />
 
-          {!data.length ? (
+          {!visibleData.length ? (
             false
           ) : (
             <ToDosList
-              data={data}
+              data={visibleData}
               toggleIsCompleted={this.toggleIsCompleted}
               removeTask={this.removeTask}
             />
@@ -148,7 +150,7 @@ export default class ToDos extends Component {
             filterTasks={this.filterTasks}
             clearCompleted={this.clearCompleted}
             completedTasks={
-              data.filter(task => task.isCompleted !== true).length
+              visibleData.filter(task => task.isCompleted !== true).length
             }
           />
         </form>
