@@ -1,6 +1,6 @@
 import React from 'react';
 
-let ToDosList = ({ data, toggleIsCompleted, removeTask }) => {
+const ToDosList = ({ data, toggleIsCompleted, removeTask }) => {
   return data.map(task => {
     return (
       <div className="toDos__dropDownTask" key={task.id}>

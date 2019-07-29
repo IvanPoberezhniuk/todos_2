@@ -5,7 +5,7 @@ const FILTER = {
   completed: 'completed'
 };
 
-let ToDosFooter = ({ completedTasks, filterTasks, clearCompleted }) => {
+const ToDosFooter = ({ completedTasks, filterTasks, clearCompleted }) => {
   return (
     <>
       <div className="toDos__footer">

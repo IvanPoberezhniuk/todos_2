@@ -23,6 +23,7 @@ export default class ToDos extends Component {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.saveDataToLocalStorage);
     this.saveDataToLocalStorage();
   }
 
@@ -91,8 +92,8 @@ export default class ToDos extends Component {
 
   toggleIsCompleted = id => {
     this.setState(prevState => {
-      const taskIndex = prevState.actualData.findIndex(task => task.id === id);
       const newData = [...prevState.actualData];
+      const taskIndex = newData.findIndex(task => task.id === id);
 
       newData[taskIndex].isCompleted = !newData[taskIndex].isCompleted;
 
