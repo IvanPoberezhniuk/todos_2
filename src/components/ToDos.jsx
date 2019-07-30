@@ -64,7 +64,7 @@ export default class ToDos extends Component {
 
   removeTask = id => {
     this.setState(prevState => {
-      const newData = [...prevState.actualData.filter(task => task.id !== id)];
+      const newData = prevState.actualData.filter(task => task.id !== id);
 
       return {
         visibleData: newData,
