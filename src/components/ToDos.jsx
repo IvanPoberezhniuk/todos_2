@@ -15,8 +15,8 @@ export default class ToDos extends Component {
       JSON.parse(window.localStorage.getItem('localData')) || [];
 
     this.setState({
-      visibleData: [...localData],
-      actualData: [...localData]
+      visibleData: localData,
+      actualData: localData
     });
 
     this.saveDataToLocalStorage();
