@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
-import ToDosFooter from './toDos__footer.jsx';
-import ToDosList from './toDos__list.jsx';
+import React, { Component } from 'react';
+import TodosFooter from './todos__footer.jsx';
+import TodosList from './todos__list.jsx';
 const randomstring = require('randomstring');
 
-export default class ToDos extends PureComponent {
+export default class Todos extends Component {
   state = {
     todoList: [],
     inputValue: '',
@@ -136,9 +136,9 @@ export default class ToDos extends PureComponent {
     const itemsLeft = todoList.filter(task => task.isCompleted !== true).length;
 
     return (
-      <div className="toDos__container">
-        <h1 className="toDos__header">todos</h1>
-        <form className="toDos">
+      <div className="todos__container">
+        <h1 className="todos__header">todos</h1>
+        <form className="todos">
           <input
             type="text"
             placeholder="What need to be done?"
@@ -150,13 +150,13 @@ export default class ToDos extends PureComponent {
           <button type="submit" onClick={addTask} hidden />
 
           {areTodos ? (
-            <ToDosList
-              data={visibleTodos}
+            <TodosList
+              todos={visibleTodos}
               toggleIsCompleted={toggleIsCompleted}
               removeTask={removeTask}
             />
           ) : null}
-          <ToDosFooter
+          <TodosFooter
             activeTabIndex={activeTabIndex}
             changeFilter={changeFilter}
             clearCompleted={clearCompleted}

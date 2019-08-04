@@ -2,7 +2,7 @@ import React from 'react';
 
 const TABS = [{ type: 'All' }, { type: 'Active' }, { type: 'Completed' }];
 
-const ToDosFooter = ({
+const TodosFooter = ({
   itemsLeft,
   changeFilter,
   clearCompleted,
@@ -14,9 +14,9 @@ const ToDosFooter = ({
 
   return (
     <>
-      <div className="toDos__footer">
+      <div className="todos__footer">
         <div>{itemsLeft} items left</div>
-        <div className="toDos__filter">
+        <div className="todos__filter">
           {TABS.map((tab, index) => (
             <div
               key={index}
@@ -27,7 +27,7 @@ const ToDosFooter = ({
             </div>
           ))}
         </div>
-        <div onClick={clearCompleted} className="toDos__clearCompleted">
+        <div onClick={clearCompleted} className="todos__clearCompleted">
           Clear Completed
         </div>
       </div>
@@ -35,4 +35,4 @@ const ToDosFooter = ({
   );
 };
 
-export default ToDosFooter;
+export default TodosFooter;

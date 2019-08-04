@@ -1,22 +1,22 @@
 import React from 'react';
 
-const ToDosList = ({ data, toggleIsCompleted, removeTask }) => {
-  return data.map(task => {
+const TodosList = ({ todos, toggleIsCompleted, removeTask }) => {
+  return todos.map(task => {
     return (
-      <div className="toDos__dropDownTask" key={task.id}>
-        <div className="toDos__task-wrapper">
+      <div className="todos__dropDownTask" key={task.id}>
+        <div className="todos__task-wrapper">
           <input
             onClick={() => toggleIsCompleted(task.id)}
             type="checkbox"
-            className="toDos__toggle"
+            className="todos__toggle"
             defaultChecked={task.isCompleted}
           />
-          <span className="toDos__toggle--helper" />
-          <span className="toDos__task">{task.task}</span>
+          <span className="todos__toggle--helper" />
+          <span className="todos__task">{task.task}</span>
         </div>
         <button
           type="button"
-          className="toDos__button-delete"
+          className="todos__button-delete"
           onClick={() => removeTask(task.id)}
         >
           x
@@ -26,4 +26,6 @@ const ToDosList = ({ data, toggleIsCompleted, removeTask }) => {
   });
 };
 
-export default ToDosList;
+const MemoTodosList = React.memo(TodosList);
+
+export default MemoTodosList;

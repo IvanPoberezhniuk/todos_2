@@ -5,25 +5,25 @@ body {
   background-color: rgb(245, 245, 245);
 }
 
-.toDos {
+.todos {
   display: flex;
   flex-direction: column;
   justify-content: center;
   justify-items: center;
 }
 
-.toDos:focus {
+.todos:focus {
   outline: none;
 }
 
-.toDos__header {
+.todos__header {
   font-size: 100px;
   font-weight: normal;
   color: rgba(175, 47, 47, 0.15);
   margin: 0;
 }
 
-.toDos__container {
+.todos__container {
   width: 100%;
   display: flex;
   align-items: center;
@@ -44,7 +44,7 @@ body {
   font-style: italic;
 }
 
-.toDos__dropDownTask {
+.todos__dropDownTask {
   max-width: 600px;
   min-height: 58px;
   display: flex;
@@ -56,17 +56,17 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-.toDos__dropDownTask:hover {
+.todos__dropDownTask:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.03);
 }
 
-.toDos__dropDownTask > div {
+.todos__dropDownTask > div {
   display: flex;
   align-items: center;
 }
 
-.toDos__button-delete {
+.todos__button-delete {
   opacity: 0;
   width: 58px;
   height: 58px;
@@ -77,13 +77,13 @@ body {
   font-weight: bold;
 }
 
-.toDos__button-delete:hover {
+.todos__button-delete:hover {
   cursor: pointer;
   opacity: 1;
   border: 3px solid rgba(0, 0, 0, 0.03);
 }
 
-.toDos__footer {
+.todos__footer {
   display: flex;
   color: rgba(0, 0, 0, 0.336);
   justify-content: space-between;
@@ -91,28 +91,28 @@ body {
   padding: 10px 5px;
 }
 
-.toDos__filter {
+.todos__filter {
   width: 170px;
   display: flex;
   justify-content: space-between;
 }
 
-.toDos__filter > div {
+.todos__filter > div {
   padding: 2px;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.toDos__filter > div:hover {
+.todos__filter > div:hover {
   box-sizing: border-box;
   color: rgba(175, 47, 47, 0.452);
 }
 
-.toDos__task-wrapper {
+.todos__task-wrapper {
   position: relative;
 }
 
-.toDos__toggle {
+.todos__toggle {
   position: relative;
   z-index: 3;
   height: 40px;
@@ -120,15 +120,15 @@ body {
   opacity: 0;
 }
 
-.toDos__toggle:hover {
+.todos__toggle:hover {
   cursor: pointer;
 }
 
-.toDos__toggle:checked + .toDos__toggle--helper::after {
+.todos__toggle:checked + .todos__toggle--helper::after {
   visibility: visible;
 }
 
-.toDos__toggle--helper::before {
+.todos__toggle--helper::before {
   top: 12%;
   left: 0;
   cursor: pointer;
@@ -142,7 +142,7 @@ body {
   background-color: white;
 }
 
-.toDos__toggle--helper::after {
+.todos__toggle--helper::after {
   top: 20px;
   left: 11px;
   visibility: hidden;
@@ -156,7 +156,7 @@ body {
   border-bottom: 1px green solid;
 }
 
-.toDos__task {
+.todos__task {
   padding: 10px;
   font-size: 24px;
   border: none;
@@ -167,20 +167,20 @@ body {
   max-width: 480px;
 }
 
-.toDos__task:focus {
+.todos__task:focus {
   outline: none;
 }
 
-.toDos__clearCompleted:hover {
+.todos__clearCompleted:hover {
   cursor: pointer;
   text-decoration: underline;
 }
 
-.toDos__toggle:checked::after {
+.todos__toggle:checked::after {
   visibility: visible;
 }
 
-.toDos__toggle:checked ~ .toDos__task {
+.todos__toggle:checked ~ .todos__task {
   text-decoration-line: line-through;
   opacity: 0.5;
 }
