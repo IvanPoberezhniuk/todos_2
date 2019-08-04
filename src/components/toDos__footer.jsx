@@ -1,19 +1,31 @@
 import React from 'react';
 
-const FILTER = {
-  active: 'active',
-  completed: 'completed'
-};
+const TABS = [{ type: 'All' }, { type: 'Active' }, { type: 'Completed' }];
 
-const ToDosFooter = ({ completedTasks, filterTasks, clearCompleted }) => {
+const ToDosFooter = ({
+  itemsLeft,
+  changeFilter,
+  clearCompleted,
+  activeTabIndex
+}) => {
+  const activeTabStyle = {
+    color: 'rgba(175, 47, 47, 0.452)'
+  };
+
   return (
     <>
       <div className="toDos__footer">
-        <div>{completedTasks} items left</div>
+        <div>{itemsLeft} items left</div>
         <div className="toDos__filter">
-          <div onClick={filterTasks}>All</div>
-          <div onClick={() => filterTasks(FILTER.active)}>Active</div>
-          <div onClick={() => filterTasks(FILTER.completed)}>Completed</div>
+          {TABS.map((tab, index) => (
+            <div
+              key={index}
+              onClick={() => changeFilter(tab.type, index)}
+              style={index === activeTabIndex ? activeTabStyle : null}
+            >
+              {tab.type}
+            </div>
+          ))}
         </div>
         <div onClick={clearCompleted} className="toDos__clearCompleted">
           Clear Completed

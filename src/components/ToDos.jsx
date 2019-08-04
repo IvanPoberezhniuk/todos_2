@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import ToDosFooter from './toDos__footer.jsx';
 import ToDosList from './toDos__list.jsx';
 const randomstring = require('randomstring');
 
-export default class ToDos extends Component {
+export default class ToDos extends PureComponent {
   state = {
-    visibleData: [],
-    actualData: [],
-    inputValue: ''
+    todoList: [],
+    inputValue: '',
+    filter: '',
+    areTodos: false,
+    activeTabIndex: 0
   };
 
   componentDidMount() {
@@ -15,8 +17,8 @@ export default class ToDos extends Component {
       JSON.parse(window.localStorage.getItem('localData')) || [];
 
     this.setState({
-      visibleData: localData,
-      actualData: localData
+      todoList: localData,
+      areTodos: true
     });
 
     this.saveDataToLocalStorage();
@@ -31,7 +33,7 @@ export default class ToDos extends Component {
     window.addEventListener('beforeunload', () =>
       window.localStorage.setItem(
         'localData',
-        JSON.stringify(this.state.actualData)
+        JSON.stringify(this.state.todoList)
       )
     );
   };
@@ -45,7 +47,7 @@ export default class ToDos extends Component {
     } else {
       this.setState(prevState => {
         const newData = [
-          ...prevState.actualData,
+          ...prevState.todoList,
           {
             task: prevState.inputValue,
             isCompleted: false,
@@ -54,8 +56,7 @@ export default class ToDos extends Component {
         ];
 
         return {
-          visibleData: newData,
-          actualData: newData,
+          todoList: newData,
           inputValue: ''
         };
       });
@@ -64,53 +65,51 @@ export default class ToDos extends Component {
 
   removeTask = id => {
     this.setState(prevState => {
-      const newData = prevState.actualData.filter(task => task.id !== id);
+      const newData = prevState.todoList.filter(task => task.id !== id);
 
       return {
-        visibleData: newData,
-        actualData: newData
+        todoList: newData
       };
     });
   };
 
-  filterTasks = filterBy => {
-    const chosenFilter = data => {
-      switch (filterBy) {
-        default:
-          return data;
-        case 'active':
-          return data.filter(task => !task.isCompleted);
-        case 'completed':
-          return data.filter(task => task.isCompleted);
-      }
-    };
+  filterTasks = data => {
+    switch (this.state.filter) {
+      case 'Active':
+        return data.filter(task => !task.isCompleted);
+      case 'Completed':
+        return data.filter(task => task.isCompleted);
+      default:
+        return data;
+    }
+  };
 
-    this.setState(prevState => ({
-      visibleData: chosenFilter(prevState.actualData)
-    }));
+  changeFilter = (filterBy, index) => {
+    this.setState({
+      filter: filterBy,
+      activeTabIndex: index
+    });
   };
 
   toggleIsCompleted = id => {
     this.setState(prevState => {
-      const newData = [...prevState.actualData];
+      const newData = [...prevState.todoList];
       const taskIndex = newData.findIndex(task => task.id === id);
 
       newData[taskIndex].isCompleted = !newData[taskIndex].isCompleted;
 
       return {
-        visibleData: newData,
-        actualData: newData
+        todoList: newData
       };
     });
   };
 
   clearCompleted = () => {
     this.setState(prevState => {
-      const newData = prevState.actualData.filter(task => !task.isCompleted);
+      const newData = prevState.todoList.filter(task => !task.isCompleted);
 
       return {
-        visibleData: newData,
-        actualData: newData
+        todoList: newData
       };
     });
   };
@@ -122,7 +121,19 @@ export default class ToDos extends Component {
   };
 
   render() {
-    const { visibleData } = this.state;
+    const { todoList, inputValue, areTodos, activeTabIndex } = this.state;
+    const {
+      addTask,
+      removeTask,
+      changeFilter,
+      filterTasks,
+      toggleIsCompleted,
+      clearCompleted,
+      changeStateInputValue
+    } = this;
+
+    const visibleTodos = filterTasks(todoList);
+    const itemsLeft = todoList.filter(task => task.isCompleted !== true).length;
 
     return (
       <div className="toDos__container">
@@ -133,26 +144,23 @@ export default class ToDos extends Component {
             placeholder="What need to be done?"
             className="input-base"
             autoComplete="off"
-            onChange={this.changeStateInputValue}
-            value={this.state.inputValue}
+            onChange={changeStateInputValue}
+            value={inputValue}
           />
-          <button type="submit" onClick={this.addTask} hidden />
+          <button type="submit" onClick={addTask} hidden />
 
-          {!visibleData.length ? (
-            false
-          ) : (
+          {areTodos ? (
             <ToDosList
-              data={visibleData}
-              toggleIsCompleted={this.toggleIsCompleted}
-              removeTask={this.removeTask}
+              data={visibleTodos}
+              toggleIsCompleted={toggleIsCompleted}
+              removeTask={removeTask}
             />
-          )}
+          ) : null}
           <ToDosFooter
-            filterTasks={this.filterTasks}
-            clearCompleted={this.clearCompleted}
-            completedTasks={
-              visibleData.filter(task => task.isCompleted !== true).length
-            }
+            activeTabIndex={activeTabIndex}
+            changeFilter={changeFilter}
+            clearCompleted={clearCompleted}
+            itemsLeft={itemsLeft}
           />
         </form>
       </div>
