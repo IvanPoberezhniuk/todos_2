@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import TodosFooter from './todos__footer.jsx';
 import TodosList from './todos__list.jsx';
+import cashVisibleTodos from '../api/helper';
 const randomstring = require('randomstring');
 
 export default class Todos extends Component {
   state = {
     todoList: [],
     inputValue: '',
-    filter: '',
+    filter: 'All',
     areTodos: false,
     activeTabIndex: 0
   };
@@ -65,10 +66,8 @@ export default class Todos extends Component {
 
   removeTask = id => {
     this.setState(prevState => {
-      const newData = prevState.todoList.filter(task => task.id !== id);
-
       return {
-        todoList: newData
+        todoList: prevState.todoList.filter(task => task.id !== id)
       };
     });
   };
@@ -83,6 +82,8 @@ export default class Todos extends Component {
         return data;
     }
   };
+
+  cashedFilteredTodos = cashVisibleTodos(this.filterTasks);
 
   changeFilter = (filterBy, index) => {
     this.setState({
@@ -106,10 +107,8 @@ export default class Todos extends Component {
 
   clearCompleted = () => {
     this.setState(prevState => {
-      const newData = prevState.todoList.filter(task => !task.isCompleted);
-
       return {
-        todoList: newData
+        todoList: prevState.todoList.filter(task => !task.isCompleted)
       };
     });
   };
@@ -122,17 +121,7 @@ export default class Todos extends Component {
 
   render() {
     const { todoList, inputValue, areTodos, activeTabIndex } = this.state;
-    const {
-      addTask,
-      removeTask,
-      changeFilter,
-      filterTasks,
-      toggleIsCompleted,
-      clearCompleted,
-      changeStateInputValue
-    } = this;
-
-    const visibleTodos = filterTasks(todoList);
+    const visibleTodos = this.cashedFilteredTodos([...todoList]);
     const itemsLeft = todoList.filter(task => task.isCompleted !== true).length;
 
     return (
@@ -144,22 +133,22 @@ export default class Todos extends Component {
             placeholder="What need to be done?"
             className="input-base"
             autoComplete="off"
-            onChange={changeStateInputValue}
+            onChange={this.changeStateInputValue}
             value={inputValue}
           />
-          <button type="submit" onClick={addTask} hidden />
+          <button type="submit" onClick={this.addTask} hidden />
 
           {areTodos ? (
             <TodosList
-              todos={visibleTodos}
-              toggleIsCompleted={toggleIsCompleted}
-              removeTask={removeTask}
+              visibleTodos={visibleTodos}
+              toggleIsCompleted={this.toggleIsCompleted}
+              removeTask={this.removeTask}
             />
           ) : null}
           <TodosFooter
             activeTabIndex={activeTabIndex}
-            changeFilter={changeFilter}
-            clearCompleted={clearCompleted}
+            changeFilter={this.changeFilter}
+            clearCompleted={this.clearCompleted}
             itemsLeft={itemsLeft}
           />
         </form>

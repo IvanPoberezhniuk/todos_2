@@ -1,7 +1,7 @@
 import React from 'react';
 
-const TodosList = ({ todos, toggleIsCompleted, removeTask }) => {
-  return todos.map(task => {
+const TodosList = ({ visibleTodos, toggleIsCompleted, removeTask }) => {
+  return visibleTodos.map(task => {
     return (
       <div className="todos__dropDownTask" key={task.id}>
         <div className="todos__task-wrapper">
@@ -26,6 +26,4 @@ const TodosList = ({ todos, toggleIsCompleted, removeTask }) => {
   });
 };
 
-const MemoTodosList = React.memo(TodosList);
-
-export default MemoTodosList;
+export default TodosList;
