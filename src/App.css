@@ -188,3 +188,7 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.activeTab {
+  color: rgba(175, 47, 47, 0.452);
+}

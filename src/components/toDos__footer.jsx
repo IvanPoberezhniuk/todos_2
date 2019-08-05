@@ -1,4 +1,5 @@
 import React from 'react';
+const randomstring = require('randomstring');
 
 const TABS = [{ type: 'All' }, { type: 'Active' }, { type: 'Completed' }];
 
@@ -8,10 +9,6 @@ const TodosFooter = ({
   clearCompleted,
   activeTabIndex
 }) => {
-  const activeTabStyle = {
-    color: 'rgba(175, 47, 47, 0.452)'
-  };
-
   return (
     <>
       <div className="todos__footer">
@@ -19,9 +16,9 @@ const TodosFooter = ({
         <div className="todos__filter">
           {TABS.map((tab, index) => (
             <div
-              key={index}
+              key={randomstring.generate(3)}
               onClick={() => changeFilter(tab.type, index)}
-              style={index === activeTabIndex ? activeTabStyle : null}
+              className={index === activeTabIndex ? 'activeTab' : null}
             >
               {tab.type}
             </div>
