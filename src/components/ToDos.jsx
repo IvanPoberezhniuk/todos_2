@@ -122,7 +122,7 @@ export default class Todos extends Component {
   render() {
     const { todoList, inputValue, areTodos, activeTabIndex } = this.state;
     const visibleTodos = this.cashedFilteredTodos([...todoList]);
-    const itemsLeft = todoList.filter(task => task.isCompleted !== true).length;
+    const itemsLeft = todoList.filter(task => !task.isCompleted).length;
 
     return (
       <div className="todos__container">
